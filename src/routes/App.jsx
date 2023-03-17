@@ -17,6 +17,7 @@ const App = () => {
             <Route exact path="/login" element={<Login/>} />
             <Route exact path="/password-recovery" element={<RecoveryPassword/>} />
             <Route  path="*"element={<NotFound/>} />
+            
         </Routes>
         </Layout>
         
