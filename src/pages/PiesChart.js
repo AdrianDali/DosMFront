@@ -1,56 +1,77 @@
-import React from 'react';
+
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-
+import React, { useEffect, useState } from 'react';
 
 import axios from "axios";
-var porcentaje = [];
-var porcentajePlastico = [];
-// Realiza una petición GET a una URL específica
-fetch("http://127.0.0.1:8000/Rennueva/getAllClientesPlastico/")
-  .then(response => response.json())
-  .then(data => {
-    porcentaje = data.clientes;
-    porcentajePlastico = data.plastico;
-    console.log(porcentaje);
-  })
-  .catch(error => {
-    console.log("ERROR")
-    console.error(error);
-  });
 
-ChartJS.register(ArcElement, Tooltip, Legend);
 
-var options = {
-    responsive : true,
-    maintainAspectRatio: false,
-};
-
-var data = {
-    labels: porcentaje,
-    datasets: [
-        {
-            label: 'Plastico en porcentaje ',
-            data: [35, 20, 20, 15, 10],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-            ],
-            borderWidth: 1,
-        },
-    ],
-};
 
 export default function Pies() {
+    const [porcentajePlastico, setPorcentajePlastico] = useState([]); // Valor inicial de porcentajePlastico
+    const [clientes, setClientes] = useState([]);
+
+
+    useEffect(() => {
+        // Realiza una petición GET a una URL específica
+        axios
+            .get('http://127.0.0.1:8000/Rennueva/getAllClientesPlastico/')
+            .then(response => {
+                const data = response.data;
+                const pesos = data.pesos;
+                setClientes(data.clientes);
+                setPorcentajePlastico(prevPorcentaje => [...prevPorcentaje, ...pesos]);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
+
+
+
+
+    ChartJS.register(ArcElement, Tooltip, Legend);
+
+
+
+
+    var options = {
+        responsive: true,
+        maintainAspectRatio: false,
+    };
+
+    var data = {
+        labels: clientes,
+
+        datasets: [
+            {
+                label: 'Plastico en porcentaje ',
+
+                data: porcentajePlastico,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+
+
+
     return <Pie data={data} options={options} />
 }

@@ -26,7 +26,7 @@ ChartJS.register(
 
 
 
-var beneficios = [0, 56, 20, 36, 80, 40, 30, -20, 25, 30, 12, 60];
+var beneficios = [10, 13, 15, 16, 17, 21, 24, 24, 25, 30, 34, 40];
 var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
 var midata = {
